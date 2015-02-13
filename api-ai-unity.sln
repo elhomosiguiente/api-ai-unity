@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiAiSDK", "ApiAiSDK\ApiAiSDK.csproj", "{162D1664-491D-41A3-B4E7-332EAAF87CCA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{162D1664-491D-41A3-B4E7-332EAAF87CCA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{162D1664-491D-41A3-B4E7-332EAAF87CCA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{162D1664-491D-41A3-B4E7-332EAAF87CCA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{162D1664-491D-41A3-B4E7-332EAAF87CCA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = ApiAiSDK\ApiAiSDK.csproj
+	EndGlobalSection
+EndGlobal
