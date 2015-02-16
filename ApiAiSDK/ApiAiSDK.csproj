@@ -46,6 +46,8 @@
     <Compile Include="ApiAi.cs" />
     <Compile Include="AIDataService.cs" />
     <Compile Include="AIConfiguration.cs" />
+    <Compile Include="AIServiceException.cs" />
+    <Compile Include="SupportedLanguage.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

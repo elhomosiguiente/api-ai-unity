@@ -19,27 +19,20 @@
 // ***********************************************************************************************************************
 
 using System;
-using fastJSON;
 
-namespace ApiAiSDK.Model
+namespace ApiAiSDK
 {
-	[Serializable]
-	public class Status
+	public class AIServiceException : Exception
 	{
+		public AIServiceException()
+		{
+		}
 
-		[JsonProperty("code")]
-		public int code{ get; set; }
-	
-		[JsonProperty("errorType")]
-		public string errorType{ get; set; }
-	
-		[JsonProperty("errorDetails")]
-		public string errorDetails{ get; set; }
-	
-		[JsonProperty("errorID")]
-		public string errorID{ get; set; }
+		public AIServiceException(string message) : base(message)
+		{
+		}
 
-		public Status ()
+		public AIServiceException(Exception e) : base(e.Message, e)
 		{
 		}
 	}

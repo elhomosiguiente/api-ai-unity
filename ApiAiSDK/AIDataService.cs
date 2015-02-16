@@ -1,23 +1,22 @@
-﻿/***********************************************************************************************************************
- *
- * API.AI Unity SDK - client-side libraries for API.AI
- * =================================================
- *
- * Copyright (C) 2015 by Speaktoit, Inc. (https://www.speaktoit.com)
- * https://www.api.ai
- *
- ***********************************************************************************************************************
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
- *
- ***********************************************************************************************************************/
+﻿//
+// API.AI .NET SDK - client-side libraries for API.AI
+// =================================================
+//
+// Copyright (C) 2015 by Speaktoit, Inc. (https://www.speaktoit.com)
+// https://www.api.ai
+//
+// ***********************************************************************************************************************
+//
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+// the License. You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+// an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+// specific language governing permissions and limitations under the License.
+//
+// ***********************************************************************************************************************
 
 using System;
 using System.Collections;
@@ -33,7 +32,7 @@ namespace ApiAiSDK
 	{
 		private AIConfiguration config;
 
-		public AIDataService (AIConfiguration config)
+		public AIDataService(AIConfiguration config)
 		{
 			this.config = config;
 		}
@@ -41,7 +40,7 @@ namespace ApiAiSDK
 		public AIResponse Request(AIRequest request)
 		{
 
-			request.Language = config.Language;
+			request.Language = config.Language.code;
 			request.Timezone = TimeZone.CurrentTimeZone.StandardName;
 
 			try {
@@ -50,13 +49,13 @@ namespace ApiAiSDK
 				ServicePointManager.ServerCertificateValidationCallback = (a, b, c, d) => {
 					return true; };
 
-				var httpRequest = (HttpWebRequest)WebRequest.Create (config.RequestUrl);
+				var httpRequest = (HttpWebRequest)WebRequest.Create(config.RequestUrl);
 				httpRequest.Method = "POST";
 				httpRequest.ContentType = "application/json; charset=utf-8";
 				httpRequest.Accept = "application/json";
 						
-				httpRequest.Headers.Add ("Authorization", "Bearer " + config.ClientAccessToken);
-				httpRequest.Headers.Add ("ocp-apim-subscription-key", config.SubscriptionKey);
+				httpRequest.Headers.Add("Authorization", "Bearer " + config.ClientAccessToken);
+				httpRequest.Headers.Add("ocp-apim-subscription-key", config.SubscriptionKey);
 						
 				var jsonParams = new JSONParameters { 
 				UseExtensions = false,
@@ -64,32 +63,30 @@ namespace ApiAiSDK
 				SerializeNullValues = false,
 				};
 			
-				var jsonRequest = fastJSON.JSON.ToJSON (request, jsonParams);
-				Console.WriteLine ("Request: " + jsonRequest);
+				var jsonRequest = fastJSON.JSON.ToJSON(request, jsonParams);
+				Console.WriteLine("Request: " + jsonRequest);
 
 				using (var streamWriter = new StreamWriter(httpRequest.GetRequestStream())) {
-					streamWriter.Write (jsonRequest);
-					streamWriter.Close ();
+					streamWriter.Write(jsonRequest);
+					streamWriter.Close();
 				}
 
-				var httpResponse = httpRequest.GetResponse () as HttpWebResponse;
+				var httpResponse = httpRequest.GetResponse() as HttpWebResponse;
 				using (var streamReader = new StreamReader(httpResponse.GetResponseStream())) {
-					var result = streamReader.ReadToEnd ();
-					Console.WriteLine ("Result: " + result);
-					return fastJSON.JSON.ToObject<AIResponse> (result);
+					var result = streamReader.ReadToEnd();
+					Console.WriteLine("Result: " + result);
+					return fastJSON.JSON.ToObject<AIResponse>(result);
 				}
 
 			} catch (Exception e) {
-				Console.WriteLine (e);
+				throw new AIServiceException(e);
 			}
-
-			return null;
 		}
 
 		public AIResponse VoiceRequest(Stream voiceStream)
 		{
-			var request = new AIRequest ();
-			request.Language = config.Language;
+			var request = new AIRequest();
+			request.Language = config.Language.code;
 			request.Timezone = TimeZone.CurrentTimeZone.StandardName;
 
 			try {
@@ -98,12 +95,12 @@ namespace ApiAiSDK
 				ServicePointManager.ServerCertificateValidationCallback = (a, b, c, d) => {
 					return true; };
 				
-				var httpRequest = (HttpWebRequest)WebRequest.Create (config.RequestUrl);
+				var httpRequest = (HttpWebRequest)WebRequest.Create(config.RequestUrl);
 				httpRequest.Method = "POST";
 				httpRequest.Accept = "application/json";
 				
-				httpRequest.Headers.Add ("Authorization", "Bearer " + config.ClientAccessToken);
-				httpRequest.Headers.Add ("ocp-apim-subscription-key", config.SubscriptionKey);
+				httpRequest.Headers.Add("Authorization", "Bearer " + config.ClientAccessToken);
+				httpRequest.Headers.Add("ocp-apim-subscription-key", config.SubscriptionKey);
 
 				var jsonParams = new JSONParameters { 
 					UseExtensions = false,
@@ -111,9 +108,9 @@ namespace ApiAiSDK
 					SerializeNullValues = false,
 				};
 				
-				var jsonRequest = fastJSON.JSON.ToJSON (request, jsonParams);
+				var jsonRequest = fastJSON.JSON.ToJSON(request, jsonParams);
 
-				Console.WriteLine ("Request: " + jsonRequest);
+				Console.WriteLine("Request: " + jsonRequest);
 
 				var multipartClient = new MultipartHttpClient(httpRequest);
 				multipartClient.connect();
@@ -127,12 +124,9 @@ namespace ApiAiSDK
 
 				return fastJSON.JSON.ToObject<AIResponse>(textJson);
 
-			} 	
-			catch (Exception e) {
-				Console.WriteLine (e);
-			}
-
-			return null;
+			} catch (Exception e) {
+				throw new AIServiceException(e);
+			};
 		}
 
 	}

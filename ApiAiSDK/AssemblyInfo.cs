@@ -8,7 +8,7 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Speaktoit")]
-[assembly: AssemblyProduct("Unity SDK")]
+[assembly: AssemblyProduct("API.AI .NET SDK")]
 [assembly: AssemblyCopyright("Speaktoit")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
