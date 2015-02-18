@@ -7,7 +7,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{162D1664-491D-41A3-B4E7-332EAAF87CCA}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>ApiAiSDK</RootNamespace>
+    <RootNamespace>ApiAiSDK.Unity</RootNamespace>
     <AssemblyName>ApiAiSDK</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
@@ -34,24 +34,16 @@
     <Reference Include="fastJSON">
       <HintPath>lib\fastJSON.dll</HintPath>
     </Reference>
+    <Reference Include="ApiAiSDK">
+      <HintPath>lib\ApiAiSDK.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>..\..\..\..\..\..\Applications\Unity\Unity.app\Contents\Frameworks\Managed\UnityEngine.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="Model\AIRequest.cs" />
-    <Compile Include="Model\AIResponse.cs" />
-    <Compile Include="Model\QuestionMetadata.cs" />
-    <Compile Include="Model\Result.cs" />
-    <Compile Include="Model\Status.cs" />
-    <Compile Include="Http\MultipartHttpClient.cs" />
-    <Compile Include="ApiAi.cs" />
-    <Compile Include="AIDataService.cs" />
-    <Compile Include="AIConfiguration.cs" />
-    <Compile Include="AIServiceException.cs" />
-    <Compile Include="SupportedLanguage.cs" />
+    <Compile Include="ApiAiUnity.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <ItemGroup>
-    <Folder Include="Model\" />
-    <Folder Include="Http\" />
-  </ItemGroup>
 </Project>
