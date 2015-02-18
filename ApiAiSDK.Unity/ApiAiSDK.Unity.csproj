@@ -44,6 +44,11 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="ApiAiUnity.cs" />
+    <Compile Include="Android\AndroidRecognitionResult.cs" />
+    <Compile Include="Android\AndroidRecognizer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="Android\" />
+  </ItemGroup>
 </Project>
