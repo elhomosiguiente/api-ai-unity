@@ -20,19 +20,38 @@
 
 using System;
 using UnityEngine;
+using fastJSON;
 
-namespace ApiAiSDK.Unity
+namespace ApiAiSDK.Unity.Android
 {
 	public class AndroidRecognizer
 	{
+		AndroidJavaObject recognitionHelper;
+
 		public AndroidRecognizer()
 		{
 			if (Application.platform != RuntimePlatform.Android) {
 				throw new InvalidOperationException("AndroidRecognizer can't be used on other platforms than Android");
 			}
 
-
+			recognitionHelper = new AndroidJavaObject("ai.api.unityhelper.RecognitionHelper");
 		}
+
+		public void Initialize()
+		{
+			AndroidJavaClass unityPlayerClass = new AndroidJavaClass("com.unity3d.player.UnityPlayer"); 
+			AndroidJavaObject currentActivity = unityPlayerClass.GetStatic<AndroidJavaObject>("currentActivity");
+
+			recognitionHelper.Call("initialize", currentActivity);
+		}
+
+		public AndroidRecognitionResult Recognize(string lang)
+		{
+			var recognitionResultString = recognitionHelper.Call<string>("recognize", lang);
+			Debug.Log(recognitionResultString);
+			return fastJSON.JSON.ToObject<AndroidRecognitionResult>(recognitionResultString);
+		}
+
 	}
 }
 

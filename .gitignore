@@ -6,3 +6,4 @@ native/Android/UnityHelper/app/build
 local.properties
 native/Android/UnityHelper/.idea
 *.iml
+native/Android/UnityHelper/build

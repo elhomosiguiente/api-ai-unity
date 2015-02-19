@@ -22,6 +22,8 @@ using System;
 using UnityEngine;
 using ApiAiSDK;
 using ApiAiSDK.Model;
+using ApiAiSDK.Unity.Android;
+using System.Threading;
 
 namespace ApiAiSDK.Unity
 {
@@ -61,9 +63,12 @@ namespace ApiAiSDK.Unity
 	public class ApiAiUnity
 	{
 		private ApiAi apiAi;
-		AudioSource audioSource;
-		volatile bool recordingActive;
+		private AIConfiguration config;
+		private AudioSource audioSource;
+		private volatile bool recordingActive;
 		private object thisLock = new object();
+
+		private AndroidRecognizer androidRecognizer;
 
 		public event EventHandler<AIResponseEventArgs> OnResult;
 		public event EventHandler<AIErrorEventArgs> OnError;
@@ -77,7 +82,15 @@ namespace ApiAiSDK.Unity
 
 		public void Initialize(AIConfiguration config)
 		{
+			this.config = config;
+
 			apiAi = new ApiAi(config);
+
+			if(Application.platform == RuntimePlatform.Android)
+			{
+				androidRecognizer = new AndroidRecognizer();
+				androidRecognizer.Initialize();
+			}
 		}
 
 		public void StartListening(AudioSource audioSource)
@@ -87,9 +100,40 @@ namespace ApiAiSDK.Unity
 					this.audioSource = audioSource;
 					StartRecording();
 				} else {
-					throw new InvalidOperationException("Can't start ne recording session while another recording session active");
+					Debug.LogWarning("Can't start new recording session while another recording session active");
 				}
 			}
+		}
+
+		public void StartNativeRecognition(){
+			if (Application.platform != RuntimePlatform.Android) {
+				throw new InvalidOperationException("Now only Android supported");
+			}
+
+			var recognitionResult = androidRecognizer.Recognize(config.Language.code);
+
+			if (recognitionResult != null) {
+				if (!recognitionResult.IsError) {
+					var request = new AIRequest {
+						Query = recognitionResult.RecognitionResults,
+						Confidence = recognitionResult.Confidence
+					};
+
+					var aiResponse = apiAi.TextRequest(request);
+					ProcessResult(aiResponse);
+
+				} else {
+					if (OnError != null) {
+						OnError(this, new AIErrorEventArgs(new Exception(recognitionResult.ErrorMessage)));
+					}
+				}
+			}
+			else {
+				if (OnError != null) {
+					OnError(this, new AIErrorEventArgs(new Exception("AndroidRecognizer returns null")));
+				}
+			}
+
 		}
 
 		public void StopListening()
@@ -109,7 +153,7 @@ namespace ApiAiSDK.Unity
 
 				if (samples != null) {
 					try {
-						var aiResponse = apiAi.voiceRequest(samples);
+						var aiResponse = apiAi.VoiceRequest(samples);
 						ProcessResult(aiResponse);	
 					} catch (Exception ex) {
 						if (OnError != null) {
@@ -155,7 +199,7 @@ namespace ApiAiSDK.Unity
 
 		public AIResponse TextRequest(string request)
 		{
-			return apiAi.textRequest(request);
+			return apiAi.TextRequest(request);
 		}
 
 		public void ResetContexts()

@@ -33,13 +33,17 @@ import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.util.Log;
 
+import com.unity3d.player.UnityPlayer;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Semaphore;
 
 
 public class RecognitionHelper {
@@ -52,6 +56,9 @@ public class RecognitionHelper {
     private Context context;
     private Handler handler;
 
+    private Semaphore semaphore;
+
+    private String resultJsonString;
 
     private final Map<Integer, String> errorMessages = new HashMap<Integer, String>();
 
@@ -67,16 +74,22 @@ public class RecognitionHelper {
         errorMessages.put(9, "Insufficient permissions.");
     }
 
-    public void Initialize(Context context){
+    public RecognitionHelper() {
+    }
+
+    public void initialize(Context context){
         this.context = context;
         handler = new Handler(context.getMainLooper());
     }
 
     public String recognize(final String lang) {
         try {
-            startListening(lang);
+            semaphore = new Semaphore(0);
 
-            return "Not implemented";
+            startListening(lang);
+            semaphore.acquire();
+
+            return resultJsonString;
         } catch (Exception e) {
 
             JSONObject result = new JSONObject();
@@ -92,7 +105,11 @@ public class RecognitionHelper {
 
     }
 
-    public void startListening(final String lang) {
+    /**
+     *
+     * @param lang recognition language
+     */
+    private void startListening(final String lang) {
         if (!recognitionActive) {
 
             final Intent sttIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
@@ -120,6 +137,7 @@ public class RecognitionHelper {
 
         } else {
             Log.w(TAG, "Trying to start recognition while another recognition active");
+            throw new IllegalStateException("Trying to start recognition while another recognition active");
         }
     }
 
@@ -131,6 +149,11 @@ public class RecognitionHelper {
             resultJson.put("errorMessage", errorMessage);
         } catch (JSONException je) {
             Log.e(TAG, je.getMessage(), je);
+        }
+
+        resultJsonString = resultJson.toString();
+        if (semaphore != null) {
+            semaphore.release();
         }
     }
 
@@ -154,14 +177,26 @@ public class RecognitionHelper {
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
                     rates = results.getFloatArray(SpeechRecognizer.CONFIDENCE_SCORES);
-                    resultJson.put("confidence", new JSONArray(rates));
+                    if (rates != null && rates.length > 0) {
+                        final JSONArray ratesArray = new JSONArray();
+                        for (int i = 0; i < rates.length; i++) {
+                            ratesArray.put(rates[i]);
+                        }
+                        resultJson.put("confidence", ratesArray);
+                    }
                 }
             }
+
+
         } catch (JSONException je) {
             Log.e(TAG, je.getMessage(), je);
         }
 
         clearRecognizer();
+        resultJsonString = resultJson.toString();
+        if (semaphore != null) {
+            semaphore.release();
+        }
 
     }
 
@@ -247,8 +282,6 @@ public class RecognitionHelper {
                 recognitionActive = false;
 
                 RecognitionHelper.this.onResults(results);
-
-
             }
         }
 

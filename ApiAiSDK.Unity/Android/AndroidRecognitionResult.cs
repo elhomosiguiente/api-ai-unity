@@ -38,6 +38,16 @@ namespace ApiAiSDK.Unity.Android
 		[JsonProperty("confidence")]
 		public float[] Confidence{ get; set; }
 
+		public bool IsError {
+			get {
+				if (Status == "success") {
+					return false;
+				}
+
+				return true;
+			}
+		}
+
 		public AndroidRecognitionResult()
 		{
 		}

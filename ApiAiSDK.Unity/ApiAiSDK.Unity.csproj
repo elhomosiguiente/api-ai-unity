@@ -8,7 +8,7 @@
     <ProjectGuid>{162D1664-491D-41A3-B4E7-332EAAF87CCA}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>ApiAiSDK.Unity</RootNamespace>
-    <AssemblyName>ApiAiSDK</AssemblyName>
+    <AssemblyName>ApiAiSDK.Unity</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
