@@ -123,15 +123,11 @@ namespace ApiAiSDK.Unity
 					ProcessResult(aiResponse);
 
 				} else {
-					if (OnError != null) {
-						OnError(this, new AIErrorEventArgs(new Exception(recognitionResult.ErrorMessage)));
-					}
+					FireOnError(new Exception(recognitionResult.ErrorMessage));
 				}
 			}
 			else {
-				if (OnError != null) {
-					OnError(this, new AIErrorEventArgs(new Exception("AndroidRecognizer returns null")));
-				}
+				FireOnError(new Exception("AndroidRecognizer returns null"));
 			}
 
 		}
@@ -156,12 +152,8 @@ namespace ApiAiSDK.Unity
 						var aiResponse = apiAi.VoiceRequest(samples);
 						ProcessResult(aiResponse);	
 					} catch (Exception ex) {
-						if (OnError != null) {
-							OnError(this, new AIErrorEventArgs(ex));
-						}
+						FireOnError(ex);
 					}
-
-
 				}
 			}
 		}
@@ -169,13 +161,9 @@ namespace ApiAiSDK.Unity
 		private void ProcessResult(AIResponse aiResponse)
 		{
 			if (aiResponse != null) {
-				if (OnResult != null) {
-					OnResult(this, new AIResponseEventArgs(aiResponse));
-				}
+				FireOnResult(aiResponse);
 			} else {
-				if (OnError != null) {
-					OnError(this, new AIErrorEventArgs(new Exception("API.AI Service returns null")));
-				}
+				FireOnError(new Exception("API.AI Service returns null"));
 			}
 		}
 
@@ -183,17 +171,41 @@ namespace ApiAiSDK.Unity
 		{
 			audioSource.clip = Microphone.Start(null, true, 20, 16000);
 			recordingActive = true;
-			if (OnListeningStarted != null) {
-				OnListeningStarted(this, EventArgs.Empty);
-			}
+			FireOnListeningStarted();
 		}
 
 		private void StopRecording()
 		{
 			Microphone.End(null);
 			recordingActive = false;
-			if (OnListeningFinished != null) {
-				OnListeningFinished(this, EventArgs.Empty);
+			FireOnListeningFinished();
+		}
+
+		private void FireOnResult(AIResponse aiResponse){
+			var onResult = OnResult;
+			if (onResult != null) {
+				onResult(this, new AIResponseEventArgs(aiResponse));
+			}
+		}
+
+		private void FireOnError(Exception e){
+			var onError = OnError;
+			if (onError != null) {
+				onError(this, new AIErrorEventArgs(e));
+			}
+		}
+
+		private void FireOnListeningStarted(){
+			var onListeningStarted = OnListeningStarted;
+			if (onListeningStarted != null) {
+				onListeningStarted(this, EventArgs.Empty);
+			}
+		}
+
+		private void FireOnListeningFinished(){
+			var onListeningFinished = OnListeningFinished;
+			if (onListeningFinished != null) {
+				onListeningFinished(this, EventArgs.Empty);
 			}
 		}
 
