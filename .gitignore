@@ -7,3 +7,4 @@ local.properties
 native/Android/UnityHelper/.idea
 *.iml
 native/Android/UnityHelper/build
+*.userprefs
