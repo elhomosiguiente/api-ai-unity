@@ -113,6 +113,21 @@ public void StopListening()
 
 After start/stop listening you will receive api.ai result in the `OnResult` handler.
 
+**Note**: In some cases Unity application must get Sound Recording priviledges for using Microphone. To do this, change your helper module Start function in the following way 
+
+```csharp
+IEnumerator Start()
+{
+    // check access to the Microphone
+    yield return Application.RequestUserAuthorization (UserAuthorization.Microphone);
+    if (!Application.HasUserAuthorization(UserAuthorization.Microphone)) {
+        throw new NotSupportedException ("Microphone using not authorized");
+    }
+
+    ... // apiAiUnity initialization...
+}
+```
+
 #### Simple text requests
 
 Usage of text requests is very simple, all you need is text query.
