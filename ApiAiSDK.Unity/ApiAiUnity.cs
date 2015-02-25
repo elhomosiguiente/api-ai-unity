@@ -69,6 +69,7 @@ namespace ApiAiSDK.Unity
 		private object thisLock = new object();
 
 		private AndroidRecognizer androidRecognizer;
+		private ResultWrapper androidResultWrapper;
 
 		public event EventHandler<AIResponseEventArgs> OnResult;
 		public event EventHandler<AIErrorEventArgs> OnError;
@@ -93,6 +94,29 @@ namespace ApiAiSDK.Unity
 			}
 		}
 
+		public void Update()
+		{
+			if (androidResultWrapper != null) {
+				if (androidResultWrapper.IsReady) {
+					var recognitionResult = androidResultWrapper.GetResult();
+					androidResultWrapper = null;
+					androidRecognizer.Clean();
+
+					if (recognitionResult.IsError) {
+						FireOnError(new Exception(recognitionResult.ErrorMessage));
+					} else {
+						var request = new AIRequest {
+							Query = recognitionResult.RecognitionResults,
+							Confidence = recognitionResult.Confidence
+						};
+						
+						var aiResponse = apiAi.TextRequest(request);
+						ProcessResult(aiResponse);
+					}
+				}
+			}
+		}
+
 		public void StartListening(AudioSource audioSource)
 		{
 			lock (thisLock) {
@@ -110,26 +134,9 @@ namespace ApiAiSDK.Unity
 				throw new InvalidOperationException("Now only Android supported");
 			}
 
-			var recognitionResult = androidRecognizer.Recognize(config.Language.code);
-
-			if (recognitionResult != null) {
-				if (!recognitionResult.IsError) {
-					var request = new AIRequest {
-						Query = recognitionResult.RecognitionResults,
-						Confidence = recognitionResult.Confidence
-					};
-
-					var aiResponse = apiAi.TextRequest(request);
-					ProcessResult(aiResponse);
-
-				} else {
-					FireOnError(new Exception(recognitionResult.ErrorMessage));
-				}
+			if (androidResultWrapper == null) {
+				androidResultWrapper = androidRecognizer.Recognize(config.Language.code);
 			}
-			else {
-				FireOnError(new Exception("AndroidRecognizer returns null"));
-			}
-
 		}
 
 		public void StopListening()
@@ -214,11 +221,10 @@ namespace ApiAiSDK.Unity
 			return apiAi.TextRequest(request);
 		}
 
-		public void ResetContexts()
+		private void ResetContexts()
 		{
 			// TODO
 		}
-
 
 	}
 }

@@ -48,6 +48,7 @@
     <Compile Include="ApiAiUnity.cs" />
     <Compile Include="Android\AndroidRecognitionResult.cs" />
     <Compile Include="Android\AndroidRecognizer.cs" />
+    <Compile Include="Android\ResultWrapper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

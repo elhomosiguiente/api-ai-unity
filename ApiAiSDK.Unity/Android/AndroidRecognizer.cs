@@ -45,13 +45,17 @@ namespace ApiAiSDK.Unity.Android
 			recognitionHelper.Call("initialize", currentActivity);
 		}
 
-		public AndroidRecognitionResult Recognize(string lang)
+		public ResultWrapper Recognize(string lang)
 		{
-			var recognitionResultString = recognitionHelper.Call<string>("recognize", lang);
-			Debug.Log(recognitionResultString);
-			return fastJSON.JSON.ToObject<AndroidRecognitionResult>(recognitionResultString);
+			var recognitionResultObject = recognitionHelper.Call<AndroidJavaObject>("recognize", lang);
+			var wrapper = new ResultWrapper(recognitionResultObject);
+			return wrapper;
 		}
 
+		public void Clean()
+		{
+			recognitionHelper.Call("clean");
+		}
 	}
 }
 

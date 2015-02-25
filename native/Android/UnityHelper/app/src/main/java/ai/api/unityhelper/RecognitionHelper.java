@@ -33,17 +33,13 @@ import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.util.Log;
 
-import com.unity3d.player.UnityPlayer;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.Semaphore;
 
 
 public class RecognitionHelper {
@@ -56,9 +52,7 @@ public class RecognitionHelper {
     private Context context;
     private Handler handler;
 
-    private Semaphore semaphore;
-
-    private String resultJsonString;
+    private RecognitionResultObject resultObject;
 
     private final Map<Integer, String> errorMessages = new HashMap<Integer, String>();
 
@@ -82,15 +76,17 @@ public class RecognitionHelper {
         handler = new Handler(context.getMainLooper());
     }
 
-    public String recognize(final String lang) {
+    public RecognitionResultObject recognize(final String lang) {
         try {
-            semaphore = new Semaphore(0);
+            if (!recognitionActive) {
+                resultObject = new RecognitionResultObject();
+                startListening(lang);
+            }
 
-            startListening(lang);
-            semaphore.acquire();
-
-            return resultJsonString;
+            return resultObject;
         } catch (Exception e) {
+
+            resultObject = null;
 
             JSONObject result = new JSONObject();
 
@@ -100,9 +96,15 @@ public class RecognitionHelper {
             } catch (JSONException jsonEx) {
                 Log.e(TAG, jsonEx.getMessage(), jsonEx);
             }
-            return result.toString();
+            RecognitionResultObject errorResultObject = new RecognitionResultObject();
+            errorResultObject.setResult(result.toString());
+            return errorResultObject;
         }
 
+    }
+
+    public void clean(){
+        resultObject = null;
     }
 
     /**
@@ -137,7 +139,6 @@ public class RecognitionHelper {
 
         } else {
             Log.w(TAG, "Trying to start recognition while another recognition active");
-            throw new IllegalStateException("Trying to start recognition while another recognition active");
         }
     }
 
@@ -151,9 +152,9 @@ public class RecognitionHelper {
             Log.e(TAG, je.getMessage(), je);
         }
 
-        resultJsonString = resultJson.toString();
-        if (semaphore != null) {
-            semaphore.release();
+        String resultJsonString = resultJson.toString();
+        if (resultObject != null) {
+            resultObject.setResult(resultJsonString);
         }
     }
 
@@ -193,11 +194,10 @@ public class RecognitionHelper {
         }
 
         clearRecognizer();
-        resultJsonString = resultJson.toString();
-        if (semaphore != null) {
-            semaphore.release();
+        String resultJsonString = resultJson.toString();
+        if (resultObject != null) {
+            resultObject.setResult(resultJsonString);
         }
-
     }
 
     protected void initializeRecognizer() {
