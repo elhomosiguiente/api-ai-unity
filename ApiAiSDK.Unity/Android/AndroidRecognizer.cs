@@ -26,7 +26,7 @@ namespace ApiAiSDK.Unity.Android
 {
 	public class AndroidRecognizer
 	{
-		AndroidJavaObject recognitionHelper;
+		private AndroidJavaObject recognitionHelper;
 
 		public AndroidRecognizer()
 		{

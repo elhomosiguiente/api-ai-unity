@@ -62,14 +62,20 @@ namespace ApiAiSDK.Unity
 
 	public class ApiAiUnity
 	{
+
+		private class AndroidObjects
+		{
+			internal ResultWrapper androidResultWrapper;
+			internal AndroidRecognizer androidRecognizer;
+		}
+
 		private ApiAi apiAi;
 		private AIConfiguration config;
 		private AudioSource audioSource;
 		private volatile bool recordingActive;
 		private object thisLock = new object();
 
-		private AndroidRecognizer androidRecognizer;
-		private ResultWrapper androidResultWrapper;
+		private AndroidObjects androidHolder;
 
 		public event EventHandler<AIResponseEventArgs> OnResult;
 		public event EventHandler<AIErrorEventArgs> OnError;
@@ -89,30 +95,40 @@ namespace ApiAiSDK.Unity
 
 			if(Application.platform == RuntimePlatform.Android)
 			{
-				androidRecognizer = new AndroidRecognizer();
-				androidRecognizer.Initialize();
+				InitializeAndroid();
 			}
+		}
+
+		private void InitializeAndroid(){
+			androidHolder = new AndroidObjects();
+			androidHolder.androidRecognizer = new AndroidRecognizer();
+			androidHolder.androidRecognizer.Initialize();
 		}
 
 		public void Update()
 		{
-			if (androidResultWrapper != null) {
-				if (androidResultWrapper.IsReady) {
-					var recognitionResult = androidResultWrapper.GetResult();
-					androidResultWrapper = null;
-					androidRecognizer.Clean();
+			if (androidHolder != null) {
+				UpdateAndroidResult();
+			}
+		}
 
-					if (recognitionResult.IsError) {
-						FireOnError(new Exception(recognitionResult.ErrorMessage));
-					} else {
-						var request = new AIRequest {
-							Query = recognitionResult.RecognitionResults,
-							Confidence = recognitionResult.Confidence
-						};
-						
-						var aiResponse = apiAi.TextRequest(request);
-						ProcessResult(aiResponse);
-					}
+		private void UpdateAndroidResult(){
+			var wrapper = androidHolder.androidResultWrapper as ResultWrapper;
+			if (wrapper.IsReady) {
+				var recognitionResult = wrapper.GetResult();
+				androidHolder.androidResultWrapper = null;
+				androidHolder.androidRecognizer.Clean();
+				
+				if (recognitionResult.IsError) {
+					FireOnError(new Exception(recognitionResult.ErrorMessage));
+				} else {
+					var request = new AIRequest {
+						Query = recognitionResult.RecognitionResults,
+						Confidence = recognitionResult.Confidence
+					};
+					
+					var aiResponse = apiAi.TextRequest(request);
+					ProcessResult(aiResponse);
 				}
 			}
 		}
@@ -134,8 +150,13 @@ namespace ApiAiSDK.Unity
 				throw new InvalidOperationException("Now only Android supported");
 			}
 
-			if (androidResultWrapper == null) {
-				androidResultWrapper = androidRecognizer.Recognize(config.Language.code);
+			StartAndroidRecognition();
+		}
+
+		private void StartAndroidRecognition()
+		{
+			if (androidHolder.androidResultWrapper == null) {
+				androidHolder.androidResultWrapper = androidHolder.androidRecognizer.Recognize(config.Language.code);
 			}
 		}
 

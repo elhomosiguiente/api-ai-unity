@@ -25,7 +25,7 @@ namespace ApiAiSDK.Unity.Android
 {
 	public class ResultWrapper
 	{
-		AndroidJavaObject resultObject;
+		private AndroidJavaObject resultObject;
 
 		public ResultWrapper(AndroidJavaObject resultObject)
 		{
