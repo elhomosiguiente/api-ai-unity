@@ -23,6 +23,8 @@ using fastJSON;
 
 namespace ApiAiSDK.Unity.Android
 {
+
+#if UNITY_ANDROID
 	[Serializable]
 	public class AndroidRecognitionResult
 	{
@@ -52,5 +54,7 @@ namespace ApiAiSDK.Unity.Android
 		{
 		}
 	}
+#endif
+
 }
 

@@ -24,6 +24,7 @@ using fastJSON;
 
 namespace ApiAiSDK.Unity.Android
 {
+#if UNITY_ANDROID
 	public class AndroidRecognizer
 	{
 		private AndroidJavaObject recognitionHelper;
@@ -57,5 +58,7 @@ namespace ApiAiSDK.Unity.Android
 			recognitionHelper.Call("clean");
 		}
 	}
+#endif
+
 }
 

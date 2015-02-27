@@ -23,6 +23,8 @@ using UnityEngine;
 
 namespace ApiAiSDK.Unity.Android
 {
+
+#if UNITY_ANDROID	
 	public class ResultWrapper
 	{
 		private AndroidJavaObject resultObject;
@@ -51,5 +53,7 @@ namespace ApiAiSDK.Unity.Android
 			return fastJSON.JSON.ToObject<AndroidRecognitionResult>(recognitionResultString);
 		}
 	}
+#endif
+
 }
 

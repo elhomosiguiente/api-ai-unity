@@ -22,60 +22,26 @@ using System;
 using UnityEngine;
 using ApiAiSDK;
 using ApiAiSDK.Model;
-using ApiAiSDK.Unity.Android;
 using System.Threading;
 
+#if UNITY_ANDROID
+using ApiAiSDK.Unity.Android;
+#endif
+
 namespace ApiAiSDK.Unity
-{
-	public class AIResponseEventArgs : EventArgs
-	{
-		private readonly AIResponse response;
-
-		public AIResponse Response {
-			get {
-				return response;
-			}
-		}
-
-		public AIResponseEventArgs(AIResponse response)
-		{
-			this.response = response;
-		}
-	}
-
-	public class AIErrorEventArgs : EventArgs
-	{
-
-		private readonly Exception exception;
-
-		public Exception Exception {
-			get {
-				return exception;
-			}
-		}
-
-		public AIErrorEventArgs(Exception ex)
-		{
-			exception = ex;
-		}
-	}
-
+{	
 	public class ApiAiUnity
 	{
-
-		private class AndroidObjects
-		{
-			internal ResultWrapper androidResultWrapper;
-			internal AndroidRecognizer androidRecognizer;
-		}
-
 		private ApiAi apiAi;
 		private AIConfiguration config;
 		private AudioSource audioSource;
 		private volatile bool recordingActive;
-		private object thisLock = new object();
+		private readonly object thisLock = new object();
 
-		private AndroidObjects androidHolder;
+#if UNITY_ANDROID
+		private ResultWrapper androidResultWrapper;
+		private AndroidRecognizer androidRecognizer;
+#endif
 
 		public event EventHandler<AIResponseEventArgs> OnResult;
 		public event EventHandler<AIErrorEventArgs> OnError;
@@ -93,31 +59,42 @@ namespace ApiAiSDK.Unity
 
 			apiAi = new ApiAi(config);
 
+#if UNITY_ANDROID
+
 			if(Application.platform == RuntimePlatform.Android)
 			{
 				InitializeAndroid();
 			}
-		}
 
-		private void InitializeAndroid(){
-			androidHolder = new AndroidObjects();
-			androidHolder.androidRecognizer = new AndroidRecognizer();
-			androidHolder.androidRecognizer.Initialize();
+#endif
+
 		}
+			
+#if UNITY_ANDROID
+		private void InitializeAndroid(){
+			androidRecognizer = new AndroidRecognizer();
+			androidRecognizer.Initialize();
+		}
+#endif
 
 		public void Update()
 		{
-			if (androidHolder != null) {
+
+#if UNITY_ANDROID
+			if (androidResultWrapper != null) {
 				UpdateAndroidResult();
 			}
+#endif
+
 		}
 
+#if UNITY_ANDROID
 		private void UpdateAndroidResult(){
-			var wrapper = androidHolder.androidResultWrapper as ResultWrapper;
+			var wrapper = androidResultWrapper;
 			if (wrapper.IsReady) {
 				var recognitionResult = wrapper.GetResult();
-				androidHolder.androidResultWrapper = null;
-				androidHolder.androidRecognizer.Clean();
+				androidResultWrapper = null;
+				androidRecognizer.Clean();
 				
 				if (recognitionResult.IsError) {
 					FireOnError(new Exception(recognitionResult.ErrorMessage));
@@ -132,6 +109,7 @@ namespace ApiAiSDK.Unity
 				}
 			}
 		}
+#endif
 
 		public void StartListening(AudioSource audioSource)
 		{
@@ -150,14 +128,11 @@ namespace ApiAiSDK.Unity
 				throw new InvalidOperationException("Now only Android supported");
 			}
 
-			StartAndroidRecognition();
-		}
-
-		private void StartAndroidRecognition()
-		{
-			if (androidHolder.androidResultWrapper == null) {
-				androidHolder.androidResultWrapper = androidHolder.androidRecognizer.Recognize(config.Language.code);
+#if UNITY_ANDROID
+			if (androidResultWrapper == null) {
+				androidResultWrapper = androidRecognizer.Recognize(config.Language.code);
 			}
+#endif
 		}
 
 		public void StopListening()
@@ -247,6 +222,39 @@ namespace ApiAiSDK.Unity
 			// TODO
 		}
 
+	}
+
+	public class AIResponseEventArgs : EventArgs
+	{
+		private readonly AIResponse response;
+		
+		public AIResponse Response {
+			get {
+				return response;
+			}
+		}
+		
+		public AIResponseEventArgs(AIResponse response)
+		{
+			this.response = response;
+		}
+	}
+	
+	public class AIErrorEventArgs : EventArgs
+	{
+		
+		private readonly Exception exception;
+		
+		public Exception Exception {
+			get {
+				return exception;
+			}
+		}
+		
+		public AIErrorEventArgs(Exception ex)
+		{
+			exception = ex;
+		}
 	}
 }
 
