@@ -57,7 +57,7 @@ namespace ApiAiSDK.Unity
 		{
 			this.config = config;
 
-			apiAi = new ApiAi(config);
+			apiAi = new ApiAi(this.config);
 
 #if UNITY_ANDROID
 
