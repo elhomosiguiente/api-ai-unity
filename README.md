@@ -6,7 +6,7 @@ Library provides simple programming interface for making text and voice requests
 
 ## Getting started
 
-For using this Unity SDK you must have Unity installed on your computer. See [oficial website](http://unity3d.com) for details.
+For using this Unity SDK you must have Unity installed on your computer. See [official website](http://unity3d.com) for details.
 
 ### Installation
 
