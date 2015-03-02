@@ -57,6 +57,10 @@ namespace ApiAiSDK.Unity
 		{
 			this.config = config;
 
+#if UNITY_IPHONE
+            config.JsonProcessingWithoutDynamicCode = true;
+#endif
+
 			apiAi = new ApiAi(this.config);
 
 #if UNITY_ANDROID
