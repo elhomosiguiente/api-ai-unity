@@ -86,10 +86,10 @@ ApiAi Unity SDK let you to perform the following actions:
 2. Send simple text request to the api.ai service
 3. Use integrated Android recognition engine for recognition and send recognized text to the api.ai service for processing
 
-#### Using Speaktoit recognition
+#### Using API.AI recognition
 
-To use Speaktoit voice recognition service you need to provide ApiAiUnity object with valid `AudioSource` object. It can be usually recieved using  `GetComponent<AudioSource>()` function.
-Temporary limitation of this case is if you using Speaktoit recognition you need to stop listening manually. So, use this code snippets to start and stop listening.
+To use API.AI voice recognition service you need to provide ApiAiUnity object with valid `AudioSource` object. It can be usually recieved using  `GetComponent<AudioSource>()` function.
+Temporary limitation of this case is if you using API.AI recognition you need to stop listening manually. So, use this code snippets to start and stop listening.
 
 ```csharp
 public void StartListening()
