@@ -9,7 +9,7 @@ Library provides simple programming interface for making text and voice requests
 
 For using this Unity SDK you must have Unity installed on your computer. See [official website](http://unity3d.com) for details.
 
-Also see the [sample app](https://github.com/api-ai/api-ai-unity-sample).
+Also see the [sample app](https://github.com/api-ai/api-ai-unity-sample) for the example of integration.
 
 ### Installation
 
