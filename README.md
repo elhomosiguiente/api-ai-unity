@@ -1,13 +1,15 @@
 api.ai: Unity Plugin
 =============
 
-The Api.ai Unity Plugin makes it easy to integrate the [API.AI natural language processing API](http://api.ai) into your Unity project. Api.ai allows using voice commands and integration with dialog scenarios defined for a particular agent in API.AI.
+The Api.ai Unity Plugin makes it easy to integrate the [API.AI natural language processing API](http://api.ai) into your Unity project. Api.ai allows using voice commands and integration with dialog scenarios defined for a particular agent in Api.ai.
 
 Library provides simple programming interface for making text and voice requests to the API.AI service. 
 
 ## Getting started
 
 For using this Unity SDK you must have Unity installed on your computer. See [official website](http://unity3d.com) for details.
+
+Also see the [sample app](https://github.com/api-ai/api-ai-unity-sample).
 
 ### Installation
 
@@ -38,6 +40,7 @@ Download plugin bundle, and unpack it to the Assets folder in your project.
 * First, add API.AI usings
 
     ```csharp
+    using fastJSON;
     using ApiAiSDK;
     using ApiAiSDK.Model;
     using ApiAiSDK.Unity;
