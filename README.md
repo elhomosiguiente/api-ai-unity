@@ -35,10 +35,18 @@ Download plugin bundle, and unpack it to the Assets folder in your project.
     }
     ```
 
+* First, add API.AI usings
+
+    ```csharp
+    using ApiAiSDK;
+    using ApiAiSDK.Model;
+    using ApiAiSDK.Unity;
+    ```
+
 * Add private field to your module to keep reference to the SDK object
 
     ```csharp
-        private ApiAiUnity apiAiUnity;
+    private ApiAiUnity apiAiUnity;
     ```
 
 * On the start of your module ApiAiUnity object must be initialized. Required data for initialization is keys from your development console on [api.ai](http://api.ai) service and one of supported languages
