@@ -22,7 +22,7 @@ First, load and see **ServiceSample** scene from the API.AI bundle.
 
 The sample demonstrates API.AI SDK features.
 
-![Running Sample](runningSample.png)
+![Running Sample](docs/images/runningSample.png)
 
 * Top buttons starts and stops listening accordingly.
 * With text field and **Send Text** button you can make text request to the server.
