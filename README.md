@@ -13,7 +13,7 @@ Also see the [sample app](https://github.com/api-ai/api-ai-unity-sample) for the
 
 ### Installation
 
-Download plugin bundle, and unpack it to the Assets folder in your project.
+[Download](https://www.assetstore.unity3d.com/en/#!/content/31498) plugin bundle from the Unity Asset Store, and unpack it to the Assets folder in your project.
 
 ### Create helper module
 
