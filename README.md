@@ -15,6 +15,38 @@ Also see the [sample app](https://github.com/api-ai/api-ai-unity-sample) for the
 
 [Download](https://www.assetstore.unity3d.com/en/#!/content/31498) plugin bundle from the Unity Asset Store, and unpack it to the Assets folder in your project.
 
+### Example
+
+First, load and see **ServiceSample** scene from the API.AI bundle. 
+![API.AI Bundle](docs/images/bundle.png)
+
+The sample demonstrates API.AI SDK features.
+
+![Running Sample](runningSample.png)
+
+* Top buttons starts and stops listening accordingly.
+* With text field and **Send Text** button you can make text request to the server.
+* **Android Recognizer** button demonstrates recognition option available only on Android devices 
+
+**ApiAiModule** file contains C# code for the sample scene, take a look at methods in the module.
+
+In `Start` method it initialize `ApiAiUnity` object with access keys.
+```csharp
+const string SUBSCRIPTION_KEY = "cb9693af-85ce-4fbf-844a-5563722fc27f";
+const string ACCESS_TOKEN = "3485a96fb27744db83e78b8c4bc9e7b7";
+var config = new AIConfiguration(SUBSCRIPTION_KEY, ACCESS_TOKEN, SupportedLanguage.English);
+apiAiUnity = new ApiAiUnity();
+apiAiUnity.Initialize(config);
+```
+and configure handlers for `OnResult` and `OnError` events
+```csharp
+apiAiUnity.OnError += HandleOnError;
+apiAiUnity.OnResult += HandleOnResult;
+```
+
+Methods `StartListening` and `StopListening` connected to particular buttons in the scene UI.
+![OnClick](docs/images/buttonOnClick.png)
+
 ### Create helper module
 
 * Add new script to the Assets folder (ApiAiModule, for example) ![Create script](docs/images/create_script.png)
