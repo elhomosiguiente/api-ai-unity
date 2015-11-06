@@ -93,6 +93,7 @@ Download plugin bundle, and unpack it to the Assets folder in your project.
 ### Usage
 
 ApiAi Unity SDK let you to perform the following actions:
+
 1. Start listening process and then send voice data to the api.ai service for recognition and processing
 2. Send simple text request to the api.ai service
 3. Use integrated Android recognition engine for recognition and send recognized text to the api.ai service for processing
