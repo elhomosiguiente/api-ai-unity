@@ -1,14 +1,14 @@
-# api.ai: Unity Plugin
+# Api.ai: Unity Plugin
 
-The Api.ai Unity Plugin makes it easy to integrate the [API.AI natural language processing API](http://api.ai) into your Unity project. Api.ai allows using voice commands and integration with dialog scenarios defined for a particular agent in Api.ai.
+The Api.ai Unity Plugin makes it easy to integrate the [Api.ai natural language processing API](http://api.ai) into your Unity project. Api.ai allows the use of voice commands and integration with dialog scenarios defined for a particular agent in Api.ai.
 
-Library provides simple programming interface for making text and voice requests to the API.AI service. 
+The Library provides a simple programming interface for making text and voice requests to the Api.ai service. 
 
 ## Getting started
 
-For using this Unity SDK you must have Unity installed on your computer. See [official website](http://unity3d.com) for details.
+To use the Unity SDK you must have Unity installed on your computer. See [official website](http://unity3d.com) for details.
 
-Also see the [sample app](https://github.com/api-ai/api-ai-unity-sample) for the example of integration.
+Also see [sample app](https://github.com/api-ai/api-ai-unity-sample) for an example of integration.
 
 ### Installation
 
@@ -16,25 +16,25 @@ Also see the [sample app](https://github.com/api-ai/api-ai-unity-sample) for the
 
 ### Example
 
-First, load and see **ServiceSample** scene from the API.AI bundle. 
+First, load and watch the **ServiceSample** scene from the Api.ai bundle. 
 
-![API.AI Bundle](docs/images/bundle.png)
+![Api.ai Bundle](docs/images/bundle.png)
 
-The sample demonstrates API.AI SDK features.
+This sample demonstrates Api.ai SDK features.
 
 ![Running Sample](docs/images/runningSample.png)
 
-* Top buttons starts and stops listening accordingly.
-* With text field and **Send Text** button you can make text request to the server.
-* **Android Recognizer** button demonstrates recognition option available only on Android devices.
+* Top buttons start and stop listening accordingly.
+* With the text field and **Send Text** button you can make text requests to the server.
+* **Android Recognizer** button demonstrates recognition options available only on Android devices.
 
-**ApiAiModule** file contains C# code for the sample scene, take a look at methods in the module.
+**ApiAiModule** file contains C# code for the sample scene. You can take a look at the methods in the module.
 
 #### Initialization
 
-In `Start` method it initialize `ApiAiUnity` object with access keys (use your access keys from [api.ai](https://api.ai) console).
+In the ‘Start’ method, initialize the ‘ApiAiUnity’ object with access keys (use your access keys from [api.ai](https://api.ai) console).
 
-``` csharp
+```csharp
 const string SUBSCRIPTION_KEY = "cb9693af-85ce-4fbf-844a-5563722fc27f";
 const string ACCESS_TOKEN = "3485a96fb27744db83e78b8c4bc9e7b7";
 var config = new AIConfiguration(SUBSCRIPTION_KEY, ACCESS_TOKEN, SupportedLanguage.English);
@@ -42,18 +42,18 @@ apiAiUnity = new ApiAiUnity();
 apiAiUnity.Initialize(config);
 ```
 
-and configure handlers for `OnResult` and `OnError` events
+and configure handlers for ‘OnResult’ and ‘OnError’ events
 
-``` csharp
+```csharp
 apiAiUnity.OnError += HandleOnError;
 apiAiUnity.OnResult += HandleOnResult;
 ```
 
 #### Results processing
 
-In `HandleOnResult` and `HandleOnError` you need to process server response, in the example it will be printed to text field.
+In ‘HandleOnResult’ and ‘HandleOnError’ you need to process the server response. In the example, it will be printed to the text field.
 
-``` csharp
+```csharp
 void HandleOnResult(object sender, AIResponseEventArgs e)
 {
     var aiResponse = e.Response;
@@ -72,12 +72,11 @@ void HandleOnResult(object sender, AIResponseEventArgs e)
 
 #### Start and stop listening
 
-Methods `StartListening` and `StopListening` connected to particular buttons in the scene UI.
+The methods ‘StartListening’ and ‘StopListening’ are connected to particular buttons in the scene UI.
 
 ![OnClick](docs/images/buttonOnClick.png)
 
-In the `StartListening` method you need pass `AudioSource` object to the `apiAi` object. `AudioSource` will be used for audio capturing.
-
+In the ‘StartListening` method you need to pass the ‘AudioSource’ object to the ‘apiAi’ object. ‘AudioSource’ will be used for audio capturing.
 ``` csharp
 public void StartListening()
 {   
@@ -86,7 +85,7 @@ public void StartListening()
 }
 ```
 
-The `StopListening` method is quite simple, all work done in the `ApiAi` module.
+The ‘StopListening’ method is quite simple. All the work is done in the ‘ApiAi’ module.
 
 ``` csharp
 public void StopListening()
@@ -104,7 +103,7 @@ public void StopListening()
 
 #### Text requests
 
-Another way to make requests is **text requests**. In this case result will not fire `OnResult` event, all work will be done synchronously.
+Another way to make requests is through **text requests**. In this case, results will not fire the ‘OnResult’ event. All work will be done simultaneously.
 
 ``` csharp
 public void SendText()
@@ -133,9 +132,9 @@ public void SendText()
 
 #### Native Android recognition
 
-In some cases it will be useful to use Google recognition engine built-in into Android platform. The way has at least one advantage: using voice activity detection (you don't need to stop listening manually).
+In some cases it will be useful to use the Google recognition engine built into the Android platform. This way has at least one advantage: using voice activity detection. This means you don't need to stop listening manually.
 
-To start native Android recognition all you need is call appropriate method:
+To start native Android recognition, all you need is a call appropriate method:
 
 ``` csharp
 public void StartNativeRecognition()
@@ -150,7 +149,7 @@ public void StartNativeRecognition()
 }
 ```
 
-But Unity platform needs one more step to make Unity<=>Android interop working, you need to call Update method once per frame. So, the code below do this.
+But the Unity platform needs one more step to make the Unity<=>Android interop work. You need to call the Update method once per frame. To do this, enter the code below:
 
 ``` csharp
 // Update is called once per frame
@@ -165,9 +164,9 @@ void Update()
 
 ### Create helper module
 
-* Add new script to the Assets folder (ApiAiModule, for example) ![Create script](docs/images/create_script.png)
+* Add a new script to the Assets folder (ApiAiModule, for example) ![Create script](docs/images/create_script.png)
   
-* Your new module should looks like
+* Your new module should look like this:
   
   ``` csharp
     using UnityEngine;
@@ -187,7 +186,7 @@ void Update()
     }
   ```
   
-* First, add API.AI usings
+* First add Api.ai using
   
   ``` csharp
     using fastJSON;
@@ -196,13 +195,13 @@ void Update()
     using ApiAiSDK.Unity;
   ```
   
-* Add private field to your module to keep reference to the SDK object
+* Add a private field to your module to keep the reference to the SDK object:
   
   ``` csharp
     private ApiAiUnity apiAiUnity;
   ```
   
-* On the start of your module ApiAiUnity object must be initialized. Required data for initialization is keys from your development console on [api.ai](http://api.ai) service and one of supported languages
+* At the start of your module, the ApiAiUnity object must be initialized. Required data for initialization are the keys from your development console on [api.ai](http://api.ai) service and a supported language:
   
   ``` csharp
     // Use this for initialization
@@ -221,7 +220,7 @@ void Update()
     }
   ```
   
-* `OnError` and `OnResult` events used for processing service results. So, handling functions must look like
+* ‘OnError’ and ‘OnResult’ events are used for processing service results. Handling functions must look like this:
   
   ``` csharp
     void HandleOnResult(object sender, AIResponseEventArgs e)
@@ -242,17 +241,17 @@ void Update()
 
 ### Usage
 
-ApiAi Unity SDK let you to perform the following actions:
+ApiAi Unity SDK lets you perform the following actions:
 
-1. Start listening process and then send voice data to the api.ai service for recognition and processing
-2. Send simple text request to the api.ai service
-3. Use integrated Android recognition engine for recognition and send recognized text to the api.ai service for processing
+1. Start the listening process and then send voice data to the Api.ai service for recognition and processing
+2. Send a simple text request to the Api.ai service
+3. Use the integrated Android recognition engine to send recognized text to the Api.ai service for processing
 
-#### Using API.AI recognition
+#### Using Api.ai recognition
 
-To use API.AI voice recognition service you need to provide ApiAiUnity object with valid `AudioSource` object. It can be usually recieved using  `GetComponent<AudioSource>()` function.
+To use the Api.ai voice recognition service you need to provide the ApiAiUnity object with a valid ‘AudioSource’ object. This can usually be received by using the `GetComponent<AudioSource>()` function.
 
-Temporary limitation of this case is if you using API.AI recognition you need to stop listening manually. So, use this code snippets to start and stop listening.
+A temporary limitation of this situation is that if you are using Api.ai recognition, you need to stop listening manually. You can use these code snippets to start and stop listening:
 
 ``` csharp
 public void StartListening()
@@ -275,9 +274,9 @@ public void StopListening()
 }
 ```
 
-After start/stop listening you will receive api.ai result in the `OnResult` handler.
+After you start or stop listening, you will receive the Api.ai result in the ‘OnResult’ handler.
 
-**Note**: In some cases Unity application must get Sound Recording priviledges for using Microphone. To do this, change your helper module Start function in the following way 
+**Note**: In some cases the Unity application must get Sound Recording privileges in order to use the Microphone. To do so, change your helper module Start function like this: 
 
 ``` csharp
 IEnumerator Start()
@@ -294,7 +293,7 @@ IEnumerator Start()
 
 #### Simple text requests
 
-Usage of text requests is very simple, all you need is text query.
+The use of text requests is very simple. All you need is a text query.
 
 ``` csharp
 public void SendText()
@@ -313,11 +312,11 @@ public void SendText()
 }
 ```
 
-**Note**, what you will receive api.ai result immediatly, not in the `OnResult` handler.
+**Note**: You will receive the Api.ai result immediately, not in the ‘OnResult’ handler.
 
 #### Using native Android recognition
 
-This case only applicable for the Android Unity applications. You can check if the application is running on the Android platform using this simple code snippet
+This situation is only applicable for Android Unity applications. You can check if an application is running on the Android platform using this simple code snippet:
 
 ``` csharp
 if (Application.platform == RuntimePlatform.Android) {
@@ -325,7 +324,7 @@ if (Application.platform == RuntimePlatform.Android) {
 }
 ```
 
-Because of native recognition uses Unity-to-Native bridge, you need add following code to the script `Update` method. This code used for checking recognition results from native layer, because of callbacks is not supported in this case.
+Because native Android recognition uses a Unity-to-Native bridge, you need to add the following code to the script ‘Update’ method. This code is used to check recognition results from the native layer, since callbacks are not supported in this case.
 
 ``` csharp
 if (apiAiUnity != null) {
@@ -333,7 +332,7 @@ if (apiAiUnity != null) {
 }
 ```
 
-To start recognition process use simple call of the `StartNativeRecognition` method.
+To start the recognition process, use the simple call of the ‘StartNativeRecognition’ method.
 
 ``` csharp
 public void StartNativeRecognition(){
