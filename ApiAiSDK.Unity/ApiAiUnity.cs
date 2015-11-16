@@ -23,6 +23,8 @@ using UnityEngine;
 using ApiAiSDK;
 using ApiAiSDK.Model;
 using System.Threading;
+using System.Linq;
+using System.ComponentModel;
 
 #if UNITY_ANDROID
 using ApiAiSDK.Unity.Android;
@@ -57,10 +59,6 @@ namespace ApiAiSDK.Unity
 		{
 			this.config = config;
 
-#if UNITY_IPHONE
-            config.JsonProcessingWithoutDynamicCode = true;
-#endif
-
 			apiAi = new ApiAi(this.config);
 
 #if UNITY_ANDROID
@@ -94,7 +92,8 @@ namespace ApiAiSDK.Unity
 
 #if UNITY_ANDROID
 		private void UpdateAndroidResult(){
-			var wrapper = androidResultWrapper;
+            Debug.Log("UpdateAndroidResult");
+            var wrapper = androidResultWrapper;
 			if (wrapper.IsReady) {
 				var recognitionResult = wrapper.GetResult();
 				androidResultWrapper = null;
