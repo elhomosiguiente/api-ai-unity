@@ -1,6 +1,6 @@
 # Api.ai: Unity Plugin
 
-This repository is **deprecated**, please see [the sample](https://github.com/api-ai/api-ai-unity-sample) for fresh documentation.
+This repository is **deprecated**, please see [the sample](https://github.com/api-ai/api-ai-unity-sample) for fresh documentation and sources.
 
 
 
