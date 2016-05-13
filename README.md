@@ -1,5 +1,9 @@
 # Api.ai: Unity Plugin
 
+This repository is **deprecated**, please see [the sample](https://github.com/api-ai/api-ai-unity-sample) for fresh documentation.
+
+
+
 The Api.ai Unity Plugin makes it easy to integrate the [Api.ai natural language processing API](http://api.ai) into your Unity project. Api.ai allows the use of voice commands and integration with dialog scenarios defined for a particular agent in Api.ai.
 
 The Library provides a simple programming interface for making text and voice requests to the Api.ai service. 
@@ -165,63 +169,63 @@ void Update()
 ### Create helper module
 
 * Add a new script to the Assets folder (ApiAiModule, for example) ![Create script](docs/images/create_script.png)
-  
+
 * Your new module should look like this:
-  
+
   ``` csharp
     using UnityEngine;
     using System.Collections;
-  
+
     public class ApiAiModule : MonoBehaviour {
-  
+
         // Use this for initialization
         void Start () {
-  
+
         }
-  
+
         // Update is called once per frame
         void Update () {
-  
+
         }
     }
   ```
-  
+
 * First add Api.ai using
-  
+
   ``` csharp
     using fastJSON;
     using ApiAiSDK;
     using ApiAiSDK.Model;
     using ApiAiSDK.Unity;
   ```
-  
+
 * Add a private field to your module to keep the reference to the SDK object:
-  
+
   ``` csharp
     private ApiAiUnity apiAiUnity;
   ```
-  
+
 * At the start of your module, the ApiAiUnity object must be initialized. Required data for initialization are the keys from your development console on [api.ai](http://api.ai) service and a supported language:
-  
+
   ``` csharp
     // Use this for initialization
     void Start()
     {
         const string SUBSCRIPTION_KEY = "your_subscription_key";
         const string ACCESS_TOKEN = "your_access_token";
-  
+
         var config = new AIConfiguration(SUBSCRIPTION_KEY, ACCESS_TOKEN, SupportedLanguage.English);
-  
+
         apiAiUnity = new ApiAiUnity();
         apiAiUnity.Initialize(config);
-  
+
         apiAiUnity.OnResult += HandleOnResult;
         apiAiUnity.OnError += HandleOnError;
     }
   ```
-  
+
 * ‘OnError’ and ‘OnResult’ events are used for processing service results. Handling functions must look like this:
-  
+
   ``` csharp
     void HandleOnResult(object sender, AIResponseEventArgs e)
     {
@@ -232,7 +236,7 @@ void Update()
             Debug.LogError("Response is null");
         }
     }
-  
+
     void HandleOnError(object sender, AIErrorEventArgs e)
     {
         Debug.LogException(e.Exception);
